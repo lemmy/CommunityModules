@@ -18,6 +18,7 @@ Restrict(f,S) == [ x \in S |-> f[x] ]
 (* Note: The image of a set under function f can be defined as             *)
 (*       Range(Restrict(f,S)).                                             *)
 (***************************************************************************)
+\* @type: (a -> b) => Set(b);
 Range(f) == { f[x] : x \in DOMAIN f }
 
 
@@ -46,6 +47,7 @@ AntiFunction(f) == Inverse(f, DOMAIN f, Range(f))
 (* This definition is overridden by TLC in the Java class SequencesExt.    *)
 (* The operator is overridden by the Java method with the same name.       *)
 (***************************************************************************)
+\* @type: (a -> b) => Bool;
 IsInjective(f) == \A a,b \in DOMAIN f : f[a] = f[b] => a = b
 
 (***************************************************************************)

@@ -24,6 +24,7 @@ SetToSeq(S) ==
   (* Convert a set to some sequence that contains all the elements of the   *)
   (* set exactly once, and contains no other elements.                      *)
   (**************************************************************************)
+  \* @type: Set(a) => Seq(a);
   CHOOSE f \in [1..Cardinality(S) -> S] : IsInjective(f)
 
 SetToSortSeq(S, op(_,_)) ==
@@ -31,6 +32,7 @@ SetToSortSeq(S, op(_,_)) ==
   (* Convert a set to a sorted sequence that contains all the elements of   *)
   (* the set exactly once, and contains no other elements.                  *)
   (**************************************************************************)
+  \* @type: (Set(a), ((a, a) => Bool)) => Seq(a);
   \* Not defined via CHOOSE like SetToSeq but with an additional conjunct,
   \* because this variant works efficiently without a dedicated TLC override.
   SortSeq(SetToSeq(S), op)
@@ -254,6 +256,7 @@ FlattenSeq(seqs) ==
   (*  FlattenSeq(<< <<"a">>, <<"b">> >>) = <<"a", "b">>                     *)
   (*  FlattenSeq(<< "a", "b" >>) = "ab"                                     *)
   (**************************************************************************)
+  \* @type: Seq(Seq(a)) => Seq(a);
   IF Len(seqs) = 0 THEN seqs ELSE
     \* Not via  FoldSeq(\o, <<>>, seqs)  here to support strings with TLC.
     LET flatten[i \in 1..Len(seqs)] ==
@@ -286,6 +289,7 @@ SubSeqs(s) ==
   (* The set of all subsequences of the sequence  s  .  Note that the empty *)
   (* sequence  <<>>  is defined to be a subsequence of any sequence.        *)
   (**************************************************************************)
+  \* @type: Seq(a) => Set(Seq(a));
   { SubSeq(s, i+1, j) : i, j \in 0..Len(s) }
 
 
@@ -331,6 +335,7 @@ ReplaceAllSubSeqs(r, s, t) ==
   (*  ReplaceAllSubSeqs(<<2>>,<<3>>,<<1,3>>) = <<1,2>>                      *)
   (*  ReplaceAllSubSeqs(<<2,2>>,<<1,1>>,<<1,1,1>>) = <<2,2,1>>              *)
   (**************************************************************************)
+  \* @type: (Seq(r), Seq(s), Seq(t) => Seq({r,t});
   CASE s = t -> r
     [] r = s -> t  \* TLC optimization
     [] s # t /\ Len(s) = 0 ->
